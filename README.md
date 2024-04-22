@@ -4,7 +4,7 @@
 - webmozart/assert
 # Install
 ```bash
-composer require plakidan/qr-uct
+composer require oneb/qr-uct
 ```
 # Usage
 ```php
