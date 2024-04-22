@@ -10,12 +10,13 @@ composer require plakidan/qr-uct
 ```php
 $generator = new \UCT\Generator();
 
-$generator->setAmount(10.1)
+$generator
+    ->setAmount(10.1)
     ->setCurrency('UAH')
-    ->setPaymentPurpose('Оплата згідно інвойсу #1B-22052024/2')
-    ->setReceiverAccount('UA663006140000026007500287926')
-    ->setReceiverCode('33051277')
-    ->setReceiverName('ТОВ  "КСИКОМ КОНСАЛТІНГ"');
+    ->setPaymentPurpose('Благодійний безповоротний внесок')
+    ->setReceiverAccount('UA473052990000026005026707459')
+    ->setReceiverCode('43720363')
+    ->setReceiverName('БО "Фонд Сергія Притули"');
 
 $url = $generator->generateUrl();
 ```

@@ -3,6 +3,7 @@
 namespace UCT;
 use Webmozart\Assert\Assert;
 use PHP_IBAN\IBAN;
+use splitbrain\phpQRCode\QRCode;
 
 class Generator
 {
@@ -179,6 +180,11 @@ class Generator
         $encoded = str_replace('/','_',$encoded);
         $encoded = str_replace('+','-',$encoded);
         return $this->national_bank_qr_endpoint.'/'.$encoded;
+    }
+
+    public function generateQrCodeSvg(): string
+    {
+        return QRCode::svg($this->generateUrl());
     }
 
     private function checkEncoding(string $string): void

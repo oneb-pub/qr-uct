@@ -16,6 +16,7 @@
     "require": {
         "php": ">=7.2",
         "globalcitizen/php-iban": "^4.2",
+        "splitbrain/php-qrcode": "^0.1.0",
         "webmozart/assert": "^1.11"
     },
     "minimum-stability": "dev",
