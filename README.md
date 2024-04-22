@@ -4,7 +4,7 @@
 - webmozart/assert
 # Install
 ```bash
-composer require oneb/qr-uct
+composer require oneb-pub/qr-uct
 ```
 # Usage
 ```php
