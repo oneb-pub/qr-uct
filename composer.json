@@ -1,0 +1,34 @@
+{
+    "name": "plakidan/qr-uct",
+    "description": "Ukraine credit transfer url and qr generator",
+    "license": "MIT",
+    "type": "project",
+    "keywords": [
+        "uct"
+    ],
+    "authors": [
+        {
+            "name": "Yaroslav Plakyda",
+            "email": "plakidan@gmail.com",
+            "homepage": "https://oneb.app"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "globalcitizen/php-iban": "^4.2",
+        "webmozart/assert": "^1.11"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ramsey/composer-repl": true,
+            "phpstan/extension-installer": true,
+            "ergebnis/composer-normalize": true,
+            "captainhook/plugin-composer": true
+        },
+        "sort-packages": true
+    }
+}
