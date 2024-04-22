@@ -10,7 +10,8 @@ $generator
     ->setPaymentPurpose('Благодійний безповоротний внесок')
     ->setReceiverAccount('UA473052990000026005026707459')
     ->setReceiverCode('43720363')
-    ->setReceiverName('БО "Фонд Сергія Притули"');
+    ->setReceiverName('БО "Фонд Сергія Притули"')
+    ->setDisplayText('Задонатити!');
 
 //url
 $url = $generator->generateUrl();

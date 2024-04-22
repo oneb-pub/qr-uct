@@ -64,6 +64,7 @@ class Generator
     /**
      * @param Generator::ENCODING_WIN1251|Generator::ENCODING_UTF8 $encoding
      * @return self
+     * Усі текстові дані мають бути надані у вказаному кодуванні
      */
     public function setEncoding(string $encoding): self
     {
@@ -74,6 +75,13 @@ class Generator
         return $this;
     }
 
+    /**
+     * Містить прізвище, ім’я, по батькові фізичної
+     * особи або найменування юридичної особи. Довжина значення
+     * елемента не повинна перевищувати довжину 38 символів
+     * @param string $receiver
+     * @return $this
+     */
     public function setReceiverName(string $receiver): self
     {
         Assert::lengthBetween($receiver,1,70);
@@ -84,9 +92,16 @@ class Generator
         return $this;
     }
 
+    /**
+     * Містить номер рахунку отримувача.
+     * Довжина значення елемента не повинна перевищувати
+     * довжину елемента 29 символів
+     * @param string $iban
+     * @return $this
+     */
     public function setReceiverAccount(string $iban): self
     {
-        Assert::maxLength($iban,34);
+        Assert::maxLength($iban,29);
         $validator = new IBAN();
         if(!$validator->Verify($iban)){
             throw new \InvalidArgumentException('Invalid IBAN');
@@ -97,6 +112,11 @@ class Generator
         return $this;
     }
 
+    /**
+     * Валюта країни з трьох букв у верхньому регистрі згідно ISO 4217
+     * @param string $currency
+     * @return $this
+     */
     public function setCurrency(string $currency): self
     {
         $this->checkEncoding($currency);
@@ -108,6 +128,13 @@ class Generator
         return $this;
     }
 
+    /**
+     * Максимальне число становить 999999999.99
+     * Якщо сума містить дрібну частину одиниці валюти, то ця дрібна
+     * частина обов’язково складається з двох цифрових символів
+     * @param $amount
+     * @return $this
+     */
     public function setAmount($amount): self
     {
         Assert::numeric($amount);
@@ -126,6 +153,11 @@ class Generator
         return $this;
     }
 
+    /**
+     * РНОКПП або серію (за наявності) та номер паспорта отримувача адо код ЄДРПОУ
+     * @param string $code
+     * @return $this
+     */
     public function setReceiverCode(string $code): self
     {
         //For Ukraine
@@ -136,6 +168,11 @@ class Generator
         return $this;
     }
 
+    /**
+     * Призначення платежу
+     * @param string $purpose
+     * @return $this
+     */
     public function setPaymentPurpose(string $purpose): self
     {
 
@@ -145,6 +182,16 @@ class Generator
         return $this;
     }
 
+    /**
+     * ПРАЦЮЄ НЕ ВСЮДИ
+     * Містить текст, призначений для
+     * виведення на дисплей або друку. Цей текст не включається до даних операції
+     * переказу коштів і має бути показаний користувачеві після розкодування QR-коду.
+     * Крім того, цей текст у незмінному або зміненому вигляді може
+     * використовуватись у системах обробки даних для деталізації даних операції
+     * @param string $text
+     * @return $this
+     */
     public function setDisplayText(string $text): self
     {
         Assert::maxLength($text,70);
@@ -155,6 +202,10 @@ class Generator
         return $this;
     }
 
+    /**
+     * Генерація посилання
+     * @return string
+     */
     public function generateUrl(): string
     {
 
@@ -182,6 +233,10 @@ class Generator
         return $this->national_bank_qr_endpoint.'/'.$encoded;
     }
 
+    /**
+     * Генерація QR коду у форматі SVG
+     * @return string
+     */
     public function generateQrCodeSvg(): string
     {
         return QRCode::svg($this->generateUrl());
