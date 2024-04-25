@@ -1,9 +1,9 @@
 <?php
 
 namespace UCT;
-use Webmozart\Assert\Assert;
 use PHP_IBAN\IBAN;
 use splitbrain\phpQRCode\QRCode;
+use Webmozart\Assert\Assert;
 
 class Generator
 {

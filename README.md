@@ -7,8 +7,9 @@
 composer require oneb-pub/qr-uct
 ```
 # Usage
+
 ```php
-$generator = new \UCT\Generator();
+$generator = new UCT\Generator();
 
 $generator
     ->setAmount(10.1) //Сумма у гривнях
