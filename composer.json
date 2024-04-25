@@ -31,5 +31,10 @@
             "captainhook/plugin-composer": true
         },
         "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "UCT\\": "src/"
+        }
     }
 }
