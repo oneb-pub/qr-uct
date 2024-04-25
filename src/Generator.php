@@ -140,6 +140,7 @@ class Generator
     public function setAmount($amount): self
     {
         Assert::integer($amount);
+        Assert::greaterThanEq($amount, 1);
         Assert::lessThanEq($amount, 99999999999);
 
         $main = floor($amount / 100); // Ціла частина
