@@ -1,6 +1,7 @@
 <?php
 
 namespace UCT;
+
 use PHP_IBAN\IBAN;
 use splitbrain\phpQRCode\QRCode;
 use Webmozart\Assert\Assert;
@@ -68,10 +69,10 @@ class Generator
      */
     public function setEncoding(string $encoding): self
     {
-        Assert::oneOf($encoding,[self::ENCODING_WIN1251,self::ENCODING_UTF8],'Encoding const expected, but got %s');
+        Assert::oneOf($encoding, [self::ENCODING_WIN1251, self::ENCODING_UTF8], 'Encoding const expected, but got %s');
 
         $this->encoding = $encoding;
-        
+
         return $this;
     }
 
@@ -84,7 +85,7 @@ class Generator
      */
     public function setReceiverName(string $receiver): self
     {
-        Assert::lengthBetween($receiver,1,70);
+        Assert::lengthBetween($receiver, 1, 70);
         $this->checkEncoding($receiver);
 
         $this->receiver = $receiver;
@@ -101,9 +102,9 @@ class Generator
      */
     public function setReceiverAccount(string $iban): self
     {
-        Assert::maxLength($iban,29);
+        Assert::maxLength($iban, 29);
         $validator = new IBAN();
-        if(!$validator->Verify($iban)){
+        if (!$validator->Verify($iban)) {
             throw new \InvalidArgumentException('Invalid IBAN');
         }
 
@@ -121,7 +122,7 @@ class Generator
     {
         $this->checkEncoding($currency);
         $currency = mb_strtoupper($currency);
-        Assert::length($currency,3);
+        Assert::length($currency, 3);
 
         $this->currency = $currency;
 
@@ -129,26 +130,28 @@ class Generator
     }
 
     /**
-     * Максимальне число становить 999999999.99
+     * Максимальне число становить 99999999999
      * Якщо сума містить дрібну частину одиниці валюти, то ця дрібна
      * частина обов’язково складається з двох цифрових символів
-     * @param $amount
+     * і ця сумма маж бути помножена на 100 щоб отримати ціле число - сумму в копійках
+     * @param int $amount Кількість копійок
      * @return $this
      */
     public function setAmount($amount): self
     {
-        Assert::numeric($amount);
-        Assert::lessThanEq($amount, 999999999.99);
-        $scaled = $amount * 100;
-        Assert::same((float)intval($scaled), (float)$scaled, "Not more 2 digits after comma");
-        if ((float)$amount == (int)$amount) {
-            // Якщо так, конвертуємо число у ціле
-            $amount = (int)$amount;
+        Assert::integer($amount);
+        Assert::lessThanEq($amount, 99999999999);
+
+        $main = floor($amount / 100); // Ціла частина
+        $kop = $amount - $main * 100; // Дробна частина
+
+        if($kop > 0){
+            $floatString = $main . "." . str_pad($kop, '0', 2, STR_PAD_LEFT);
         }else{
-            $amount = number_format($amount,2,'.','');
+            $floatString = $main;
         }
 
-        $this->amount = $amount;
+        $this->amount = $floatString;
 
         return $this;
     }
@@ -161,7 +164,7 @@ class Generator
     public function setReceiverCode(string $code): self
     {
         //For Ukraine
-        Assert::regex($code,'/^(?:\d{8}|\d{10}|[\p{L}]{2}\d{6})$/u');
+        Assert::regex($code, '/^(?:\d{8}|\d{10}|[\p{L}]{2}\d{6})$/u');
         $code = mb_strtoupper($code);
         $this->receiver_code = $code;
 
@@ -194,7 +197,7 @@ class Generator
      */
     public function setDisplayText(string $text): self
     {
-        Assert::maxLength($text,70);
+        Assert::maxLength($text, 70);
         $this->checkEncoding($text);
 
         $this->display_text = $text;
@@ -209,28 +212,28 @@ class Generator
     public function generateUrl(): string
     {
 
-        $string = $this->service_mark.PHP_EOL;
-        $string.= $this->format_version.PHP_EOL;
-        $string.= $this->encoding.PHP_EOL;
-        $string.= $this->function.PHP_EOL;
-        $string.= $this->bank_identifier_code.PHP_EOL;
-        Assert::lengthBetween($this->receiver,1,70,'Receiver length must be between 1 and 70, got %s');
-        $string.= $this->receiver.PHP_EOL;
-        $string.= $this->account.PHP_EOL;
-        $string.= $this->currency.$this->amount.PHP_EOL;
-        Assert::lengthBetween($this->receiver_code,8,10,'Receiver code must be 8 or 10 symbols, got %s');
-        $string.= $this->receiver_code.PHP_EOL;
-        $string.= $this->target_code.PHP_EOL;
-        $string.= $this->reference.PHP_EOL;
-        Assert::lengthBetween($this->payment_purpose,10,140,'Payment purpose must be between 10 and 140 symbols, got %s');
-        $string.= $this->payment_purpose.PHP_EOL;
-        Assert::maxLength($this->display_text,70,'Display text must be between maximum 70 symbols, got %s');
-        $string.= $this->display_text.PHP_EOL;
+        $string = $this->service_mark . PHP_EOL;
+        $string .= $this->format_version . PHP_EOL;
+        $string .= $this->encoding . PHP_EOL;
+        $string .= $this->function . PHP_EOL;
+        $string .= $this->bank_identifier_code . PHP_EOL;
+        Assert::lengthBetween($this->receiver, 1, 70, 'Receiver length must be between 1 and 70, got %s');
+        $string .= $this->receiver . PHP_EOL;
+        $string .= $this->account . PHP_EOL;
+        $string .= $this->currency . $this->amount . PHP_EOL;
+        Assert::lengthBetween($this->receiver_code, 8, 10, 'Receiver code must be 8 or 10 symbols, got %s');
+        $string .= $this->receiver_code . PHP_EOL;
+        $string .= $this->target_code . PHP_EOL;
+        $string .= $this->reference . PHP_EOL;
+        Assert::lengthBetween($this->payment_purpose, 10, 140, 'Payment purpose must be between 10 and 140 symbols, got %s');
+        $string .= $this->payment_purpose . PHP_EOL;
+        Assert::maxLength($this->display_text, 70, 'Display text must be between maximum 70 symbols, got %s');
+        $string .= $this->display_text . PHP_EOL;
 
-        $encoded = trim(base64_encode($string),'=');
-        $encoded = str_replace('/','_',$encoded);
-        $encoded = str_replace('+','-',$encoded);
-        return $this->national_bank_qr_endpoint.'/'.$encoded;
+        $encoded = trim(base64_encode($string), '=');
+        $encoded = str_replace('/', '_', $encoded);
+        $encoded = str_replace('+', '-', $encoded);
+        return $this->national_bank_qr_endpoint . '/' . $encoded;
     }
 
     /**
@@ -246,12 +249,12 @@ class Generator
     {
         $encoding = mb_detect_encoding($string);
 
-        if($this->encoding == self::ENCODING_UTF8){
+        if ($this->encoding == self::ENCODING_UTF8) {
             Assert::true(strtolower($encoding) === 'utf-8' || strtolower($encoding) == 'ascii', "Expected encoding: UTF-8. Got encoding: " . mb_detect_encoding($encoding));
-        }elseif ($this->encoding == self::ENCODING_WIN1251){
+        } elseif ($this->encoding == self::ENCODING_WIN1251) {
             Assert::true(strtolower($encoding) === 'windows-1251', "Expected encoding: UTF-8. Got encoding: " . mb_detect_encoding($encoding));
-        }else{
-            Assert::oneOf($this->encoding,[self::ENCODING_WIN1251,self::ENCODING_UTF8],'Encoding const expected, but got %s');
+        } else {
+            Assert::oneOf($this->encoding, [self::ENCODING_WIN1251, self::ENCODING_UTF8], 'Encoding const expected, but got %s');
         }
     }
 }
