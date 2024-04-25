@@ -12,7 +12,7 @@ composer require oneb-pub/qr-uct
 $generator = new UCT\Generator();
 
 $generator
-    ->setAmount(10.1) //Сумма у гривнях
+    ->setAmount(101) //Сумма у копійках (тільки ціле число)
     ->setCurrency('UAH') //Валюта
     ->setPaymentPurpose('Благодійний безповоротний внесок') //Призначення платежу
     ->setReceiverAccount('UA473052990000026005026707459') //Рахунок IBAN
