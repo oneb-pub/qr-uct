@@ -19,7 +19,14 @@ $generator
     ->setReceiverCode('43720363') // РНОКПП або ЄДРПОУ
     ->setReceiverName('БО "Фонд Сергія Притули"'); // ПІБ або на назва юридичної особи отримувача
 
+//URL
 $url = $generator->generateUrl();
+
+//QR-code
+$qrCodeSvg = $generator->generateQrCodeSvg();
+
+echo $qrCodeSvg;
+echo "<a href=\"$url\">Переказати кошти</a>";
 ```
 # Banks
 - ![Sense Bank](https://bank.gov.ua/admin_uploads/article/SenseBank_qr_page_logo.jpg)
