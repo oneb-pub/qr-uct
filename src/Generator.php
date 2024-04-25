@@ -143,7 +143,7 @@ class Generator
         Assert::same((float)intval($scaled), (float)$scaled, "Not more 2 digits after comma");
         if ((float)$amount == (int)$amount) {
             // Якщо так, конвертуємо число у ціле
-            $amount = number_format($amount);
+            $amount = (int)$amount;
         }else{
             $amount = number_format($amount,2,'.','');
         }
