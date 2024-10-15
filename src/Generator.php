@@ -147,7 +147,7 @@ class Generator
         $kop = $amount - $main * 100; // Дробна частина
 
         if($kop > 0){
-            $floatString = $main . "." . str_pad($kop, '0', 2, STR_PAD_LEFT);
+            $floatString = $main . "." . str_pad($kop, 2, '0', STR_PAD_LEFT);
         }else{
             $floatString = $main;
         }

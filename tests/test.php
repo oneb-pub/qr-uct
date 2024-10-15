@@ -5,7 +5,7 @@ include_once __DIR__ . '/../src/UCT/Generator.php';
 
 $generator = new UCT\Generator();
 $generator
-    ->setAmount(59.14)
+    ->setAmount(436.05)
     ->setCurrency('UAH')
     ->setPaymentPurpose('Благодійний безповоротний внесок')
     ->setReceiverAccount('UA473052990000026005026707459')
